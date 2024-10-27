@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function SharePage() {
@@ -36,7 +36,10 @@ export default function SharePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-yellow-100 flex flex-col items-center justify-center p-4">
+  <Suspense fallback={<>
+  Loading
+  </>}>
+      <div className="min-h-screen bg-gradient-to-br from-orange-100 to-yellow-100 flex flex-col items-center justify-center p-4">
       <main className="text-center">
         <h1 className="text-4xl font-bold text-orange-800 mb-4">🪔 Diwali Delight! 🪔</h1>
         <p className="text-2xl text-orange-700 mb-8">
@@ -58,5 +61,6 @@ export default function SharePage() {
         </p>
       </main>
     </div>
+  </Suspense>
   )
 }
