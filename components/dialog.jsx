@@ -8,7 +8,7 @@ export default function DiwaliWinningDialog({ isOpen, onClose, prize }) {
 
   const handleShare = (platform) => {
     const shareText = `I just won a ${prize} in the Diwali Giveaway! 🪔✨`
-    const shareUrl = `https://yourdomain.com/share?prize=${encodeURIComponent(prize)}`
+    const shareUrl = `https://giveaways4u.com/share?prize=${encodeURIComponent(prize)}`
 
     switch (platform) {
       case 'facebook':
@@ -102,7 +102,7 @@ export default function DiwaliWinningDialog({ isOpen, onClose, prize }) {
               <div className="flex justify-between items-center">
                 <input
                   type="text"
-                  value={`https://yourdomain.com/share?prize=${encodeURIComponent(prize)}`}
+                  value={`https://giveaways4u.com/share?prize=${encodeURIComponent(prize)}`}
                   readOnly
                   className="flex-grow mr-2 px-3 py-2 border border-orange-300 rounded-md bg-white"
                 />
