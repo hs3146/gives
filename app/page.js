@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+
+import confetti from 'canvas-confetti'
 import DiwaliWinningDialog from '@/components/dialog'
 
 // Constants
@@ -69,10 +71,12 @@ const segColors = ['#FFA500', '#FF6347', '#FFD700', '#FF4500', '#FF8C00', '#FF7F
 
 const diwaliQuotes = [
   "May the festival of lights brighten your life and bring you joy, prosperity, and happiness. Happy Diwali!",
-  // ... other quotes ...
+  "Let the light of the diyas guide you towards peace and prosperity. Happy Diwali!",
+  "Wishing you a Diwali that brings happiness, prosperity, and joy to you and all your family.",
+  "May the divine light of Diwali spread into your life peace, prosperity, happiness, and good health.",
+  "On this auspicious occasion, may joy, prosperity, and happiness illuminate your life and your home.",
 ]
 
-// WheelComponent
 const WheelComponent = ({
   segments,
   segColors,
@@ -90,6 +94,7 @@ const WheelComponent = ({
   let currentSegment = "";
   let isStarted = false;
   const [isFinished, setFinished] = useState(false);
+  const [dynamicSize, setDynamicSize] = useState(290);
   let timerHandle = 0;
   const timerDelay = segments.length;
   let angleCurrent = 0;
@@ -100,14 +105,23 @@ const WheelComponent = ({
   const downTime = segments.length * downDuration;
   let spinStart = 0;
   let frames = 0;
-  const centerX = 300;
-  const centerY = 300;
+  const centerX = dynamicSize;
+  const centerY = dynamicSize;
 
   useEffect(() => {
     wheelInit();
     setTimeout(() => {
       window.scrollTo(0, 1);
     }, 0);
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const newSize = width < 768 ? Math.min(width - 40, 290) : 290;
+      setDynamicSize(newSize);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const wheelInit = () => {
@@ -119,8 +133,8 @@ const WheelComponent = ({
     let canvas = document.getElementById("canvas");
     if (navigator.userAgent.indexOf("MSIE") !== -1) {
       canvas = document.createElement("canvas");
-      canvas.setAttribute("width", "1000");
-      canvas.setAttribute("height", "600");
+      canvas.setAttribute("width", dynamicSize * 2);
+      canvas.setAttribute("height", dynamicSize * 2);
       canvas.setAttribute("id", "canvas");
       document.getElementById("wheel").appendChild(canvas);
     }
@@ -164,7 +178,7 @@ const WheelComponent = ({
         angleDelta =
           maxSpeed * Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
       }
-      
+
       if (progress >= 1) finished = true;
     }
 
@@ -197,7 +211,7 @@ const WheelComponent = ({
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, size, lastAngle, angle, false);
+    ctx.arc(centerX, centerY, dynamicSize - 10, lastAngle, angle, false);
     ctx.lineTo(centerX, centerY);
     ctx.closePath();
     ctx.fillStyle = segColors[key];
@@ -208,7 +222,7 @@ const WheelComponent = ({
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle = contrastColor;
     ctx.font = "bold 1em " + fontFamily;
-    ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
+    ctx.fillText(value.substr(0, 21), dynamicSize / 2 + 20, 0);
     ctx.restore();
   };
 
@@ -244,7 +258,7 @@ const WheelComponent = ({
 
     // Draw outer circle
     ctx.beginPath();
-    ctx.arc(centerX, centerY, size, 0, PI2, false);
+    ctx.arc(centerX, centerY, dynamicSize - 10, 0, PI2, false);
     ctx.closePath();
 
     ctx.lineWidth = 10;
@@ -275,21 +289,23 @@ const WheelComponent = ({
     ctx.font = "bold 1.5em " + fontFamily;
     currentSegment = segments[i];
     isStarted &&
-      ctx.fillText(currentSegment, centerX + 10, centerY + size + 50);
+      ctx.fillText(currentSegment, centerX + 10, centerY + dynamicSize + 50);
   };
 
   const clear = () => {
     const ctx = canvasContext;
-    ctx.clearRect(0, 0, 1000, 800);
+    ctx.clearRect(0, 0, dynamicSize * 2, dynamicSize * 2);
   };
 
   return (
-    <div id="wheel" className="flex justify-center items-center p-2 bg-[#FEF9C4]">
+    <div id="wheel" className="flex justify-center items-center p-4 bg-[#FEF9C4] w-full">
       <canvas
         id="canvas"
-        width="600"
-        height="600"
+        width={dynamicSize * 2}
+        height={dynamicSize * 2}
         style={{
+          width: dynamicSize,
+          height: dynamicSize,
           pointerEvents: isFinished && isOnlyOnce ? "none" : "auto"
         }}
       />
@@ -297,7 +313,6 @@ const WheelComponent = ({
   );
 };
 
-// Header Component
 function Header() {
   return (
     <header className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white shadow-md">
@@ -315,7 +330,6 @@ function Header() {
   )
 }
 
-// Footer Component
 function Footer() {
   return (
     <footer className="bg-gradient-to-r from-orange-800 to-red-800 text-white py-8">
@@ -350,7 +364,6 @@ function Footer() {
   )
 }
 
-// Ad Component
 function Ad({ position }) {
   return (
     <div className={`bg-gradient-to-r from-yellow-100 to-orange-100 p-6 rounded-lg shadow-md text-center ${position === 'sidebar' ? 'h-auto' : 'h-auto'}`}>
@@ -363,7 +376,6 @@ function Ad({ position }) {
   )
 }
 
-// Product List Component
 function ProductList({ products }) {
   return (
     <section id="products" className="my-12 px-4 md:px-8 lg:px-12 border">
@@ -395,7 +407,6 @@ function ProductList({ products }) {
                 <p><strong>Screen:</strong> {product.details.screenSize}</p>
                 <p><strong>Chip:</strong> {product.details.chip}</p>
                 <p><strong>Camera:</strong> {product.details.camera}</p>
-                
                 <p><strong>Battery:</strong> {product.details.batteryLife}</p>
                 <p><strong>Price:</strong> {product.details.price}</p>
                 <p><strong>Colors:</strong> {product.details.colors.join(', ')}</p>
@@ -408,7 +419,6 @@ function ProductList({ products }) {
   )
 }
 
-// Comment Section Component
 function CommentSection() {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
@@ -505,7 +515,6 @@ function CommentSection() {
   )
 }
 
-// Countdown Timer Component
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ weeks: 0, days: 0, hours: 0, minutes: 0 })
 
@@ -547,32 +556,13 @@ function CountdownTimer() {
   )
 }
 
-// Confetti Component (CSS-based)
-function Confetti() {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50">
-      {[...Array(50)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute animate-confetti"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `-10%`,
-            animationDelay: `${Math.random() * 5}s`,
-            backgroundColor: segColors[Math.floor(Math.random() * segColors.length)],
-          }}
-        />
-      ))}
-    </div>
-  )
-}
 
-// Main App Component
 export default function GiveawayPage() {
   const [user, setUser] = useState(null)
   const [winner, setWinner] = useState(null)
   const [showConfetti, setShowConfetti] = useState(false)
   const [showWinningDialog, setShowWinningDialog] = useState(false)
+  const [showBadLuckDialog, setShowBadLuckDialog] = useState(false)
   const [engagementPrompt, setEngagementPrompt] = useState(null)
   const [spinsLeft, setSpinsLeft] = useState(3)
 
@@ -609,24 +599,21 @@ export default function GiveawayPage() {
       setWinner(result)
       setShowConfetti(true)
       setShowWinningDialog(true)
-      setTimeout(() => setShowConfetti(false), 5000) // Hide confetti after 5 seconds
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      })
+      setTimeout(() => setShowConfetti(false), 5000)
     } else {
-      setEngagementPrompt(`Better luck next time! You have ${spinsLeft - 1} spin${spinsLeft - 1 !== 1 ? 's' : ''} left.`)
+      setShowBadLuckDialog(true)
     }
-  }
-
-  const handleShare = (platform) => {
-    console.log(`Shared on ${platform}`)
-    setShowWinningDialog(false)
-    setEngagementPrompt("Thanks for sharing! Your prize will be on its way soon!")
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-orange-100 to-yellow-100">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8">
-        {showConfetti && <Confetti />}
-        
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 text-orange-800">Diwali Giveaway Extravaganza!</h1>
           <p className="text-2xl mb-6 text-orange-700">Spin the wheel for a chance to win amazing prizes this Diwali!</p>
@@ -676,14 +663,27 @@ export default function GiveawayPage() {
             </div>
           </div>
         </div>
-        
-        {showWinningDialog && winner && (
-         <>
-         <DiwaliWinningDialog isOpen={showWinningDialog} prize={winner}/>
-          
-         </>
-        )}
-        
+
+        <DiwaliWinningDialog
+          isOpen={showWinningDialog} 
+          prize={winner} 
+          onClose={() => setShowWinningDialog(false)} 
+        />
+
+        {/* <Dialog open={showBadLuckDialog} onOpenChange={setShowBadLuckDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Better luck next time!</DialogTitle>
+              <DialogDescription>
+                Don't worry, you still have {spinsLeft} spin{spinsLeft !== 1 ? 's' : ''} left. Keep trying for a chance to win amazing prizes!
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button onClick={() => setShowBadLuckDialog(false)}>Try Again</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog> */}
+
         {engagementPrompt && (
           <div className="fixed bottom-4 right-4 bg-orange-500 text-white p-4 rounded-lg shadow-lg max-w-sm animate-slideIn">
             {engagementPrompt}
