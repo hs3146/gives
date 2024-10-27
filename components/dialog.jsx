@@ -37,7 +37,7 @@ export default function DiwaliWinningDialog({ isOpen, onClose, prize }) {
   }
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`https://yourdomain.com/share?prize=${encodeURIComponent(prize)}`)
+    navigator.clipboard.writeText(`https://giveaways4u.com/share?prize=${encodeURIComponent(prize)}`)
     alert('Link copied to clipboard!')
   }
 
