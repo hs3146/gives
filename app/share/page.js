@@ -1,45 +1,37 @@
-'use client'
+'use client';
 
-import { Suspense, useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function SharePage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const prize = searchParams.get('prize')
-  const name = searchParams.get('name')
-  const [countdown, setCountdown] = useState(5)
+function ShareContent({ prize, name }) {
+  const router = useRouter();
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     if (!prize || !name) {
-      // Redirect to home if prize or name is missing
-      router.push('/')
-      return
+      router.push('/');
+      return;
     }
 
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(timer)
-          router.push('/')
+          clearInterval(timer);
+          router.push('/');
         }
-        return prev - 1
-      })
-    }, 1000)
+        return prev - 1;
+      });
+    }, 1000);
 
-    return () => clearInterval(timer)
-  }, [prize, name, router])
+    return () => clearInterval(timer);
+  }, [prize, name, router]);
 
-  // If prize or name is missing, render nothing (will redirect in useEffect)
   if (!prize || !name) {
-    return null
+    return null;
   }
 
   return (
-  <Suspense fallback={<>
-  Loading
-  </>}>
-      <div className="min-h-screen bg-gradient-to-br from-orange-100 to-yellow-100 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-yellow-100 flex flex-col items-center justify-center p-4">
       <main className="text-center">
         <h1 className="text-4xl font-bold text-orange-800 mb-4">🪔 Diwali Delight! 🪔</h1>
         <p className="text-2xl text-orange-700 mb-8">
@@ -61,6 +53,17 @@ export default function SharePage() {
         </p>
       </main>
     </div>
-  </Suspense>
-  )
+  );
+}
+
+export default function SharePage() {
+  const searchParams = useSearchParams();
+  const prize = searchParams.get('prize');
+  const name = searchParams.get('name');
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ShareContent prize={prize} name={name} />
+    </Suspense>
+  );
 }
