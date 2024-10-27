@@ -28,7 +28,7 @@ export default function DiwaliWinningDialog({ isOpen, onClose, prize }) {
       <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg shadow-xl max-w-md w-full p-6 border-2 border-orange-500">
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-orange-800 mb-2">🪔 Diwali Delight! 🪔</h2>
-          <p className="text-orange-700">Your Diwali just got brighter! You've won a {prize}!</p>
+          <p className="text-orange-700">Your Diwali just got brighter! {"You've"} won a {prize}!</p>
         </div>
         <div className="bg-white bg-opacity-50 rounded-lg shadow-inner p-4">
           {step === 1 ? (

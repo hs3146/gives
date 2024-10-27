@@ -631,7 +631,7 @@ export default function GiveawayPage() {
           <h1 className="text-5xl font-bold mb-4 text-orange-800">Diwali Giveaway Extravaganza!</h1>
           <p className="text-2xl mb-6 text-orange-700">Spin the wheel for a chance to win amazing prizes this Diwali!</p>
           {user && <p className="text-xl font-semibold text-orange-600">Welcome back, {user.name}!</p>}
-          {winner && <p className="text-xl font-semibold mt-2 text-orange-600">You've won a {winner}! Check your email for details.</p>}
+          {winner && <p className="text-xl font-semibold mt-2 text-orange-600">{"You've "} won a {winner}! Check your email for details.</p>}
           <p className="text-xl font-semibold mt-2 text-orange-600">Spins remaining: {spinsLeft}</p>
         </div>
 
