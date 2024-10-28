@@ -5,6 +5,8 @@ import Image from 'next/image'
 
 import confetti from 'canvas-confetti'
 import DiwaliWinningDialog from '@/components/dialog'
+import GoogleAd from '@/components/GoogleAd'
+import { Badge, Heart, ShoppingCart, Star } from 'lucide-react'
 
 // Constants
 const products = [
@@ -63,8 +65,38 @@ const products = [
       price: 'Starting at $1999',
       colors: ['Space Gray', 'Silver']
     }
-  }
-]
+  },
+  {
+    name: 'iPad Pro',
+    description: 'Your next computer is not a computer',
+    image: 'https://img.freepik.com/premium-psd/ipad-pro-home-desk-mockup_1332-60550.jpg?ga=GA1.2.625339193.1724837797&semt=ais_hybrid',
+    details: {
+      releaseYear: 2022,
+      screenSize: '12.9-inch Liquid Retina XDR display',
+      chip: 'M1 chip with 8-core CPU and 8-core GPU',
+      camera: '12MP Ultra Wide front camera with Center Stage',
+      batteryLife: 'Up to 10 hours of surfing the web',
+      price: '$1099',
+      colors: ['Space Gray', 'Silver']
+    }
+  },
+  {
+    name: 'Apple Watch Series 9',
+    description: 'A healthy leap ahead',
+    image: 'https://img.freepik.com/free-vector/smartwatch-with-blank-screen-black-wrist-band_107791-29216.jpg?ga=GA1.2.625339193.1724837797&semt=ais_hybrid',
+    details: {
+      releaseYear: 2023,
+      screenSize: '1.9-inch Always-On Retina display',
+      chip: 'S9 SiP with 64-bit dual-core processor',
+      camera: 'N/A',
+      batteryLife: 'Up to 18 hours',
+      price: '$399',
+      colors: ['Red', 'Starlight', 'Midnight', 'Blue', 'Green']
+    }
+  },
+
+];
+
 
 const spinItems = ['iPhone 15 Pro', 'iPhone 15', 'iPhone 14', 'Bad Luck', 'Bad Luck', 'MacBook Pro']
 const segColors = ['#FFA500', '#FF6347', '#FFD700', '#FF4500', '#FF8C00', '#FF7F50']
@@ -89,7 +121,7 @@ const WheelComponent = ({
   size = 290,
   upDuration = 100,
   downDuration = 1000,
-  fontFamily = "proxima-nova"
+  fontFamily = "helvetica"
 }) => {
   let currentSegment = "";
   let isStarted = false;
@@ -221,7 +253,7 @@ const WheelComponent = ({
     ctx.translate(centerX, centerY);
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle = contrastColor;
-    ctx.font = "bold 1em " + fontFamily;
+    ctx.font = "bold 2em " + fontFamily;
     ctx.fillText(value.substr(0, 21), dynamicSize / 2 + 20, 0);
     ctx.restore();
   };
@@ -235,7 +267,7 @@ const WheelComponent = ({
     ctx.strokeStyle = primaryColor;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.font = "1em " + fontFamily;
+    ctx.font = "2em " + fontFamily;
     for (let i = 1; i <= len; i++) {
       const angle = PI2 * (i / len) + angleCurrent;
       drawSegment(i - 1, lastAngle, angle);
@@ -286,7 +318,7 @@ const WheelComponent = ({
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = primaryColor;
-    ctx.font = "bold 1.5em " + fontFamily;
+    ctx.font = "bold 2.5em " + fontFamily;
     currentSegment = segments[i];
     isStarted &&
       ctx.fillText(currentSegment, centerX + 10, centerY + dynamicSize + 50);
@@ -376,60 +408,81 @@ function Ad({ position }) {
   )
 }
 
-function ProductList({ products }) {
+export  function ProductList() {
   return (
-    <section id="products" className="my-12 px-4 md:px-8 lg:px-12 border">
-      <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-orange-800">
-        Diwali Giveaway Products
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        {products.map((product, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:border-orange-300 transition-all duration-300 hover:shadow-xl transform hover:scale-105"
-          >
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={400}
-              height={300}
-              className="w-full h-56 md:h-64 object-cover"
-            />
-            <div className="p-4 md:p-6 space-y-2">
-              <h3 className="text-lg md:text-xl font-semibold text-orange-700">
-                {product.name}
-              </h3>
-              <p className="text-sm md:text-base text-orange-600">
-                {product.description}
-              </p>
-              <div className="text-xs md:text-sm text-gray-600 space-y-1">
-                <p><strong>Release Year:</strong> {product.details.releaseYear}</p>
-                <p><strong>Screen:</strong> {product.details.screenSize}</p>
-                <p><strong>Chip:</strong> {product.details.chip}</p>
-                <p><strong>Camera:</strong> {product.details.camera}</p>
-                <p><strong>Battery:</strong> {product.details.batteryLife}</p>
-                <p><strong>Price:</strong> {product.details.price}</p>
-                <p><strong>Colors:</strong> {product.details.colors.join(', ')}</p>
+    <div className="bg-gradient-to-r from-orange-100 to-yellow-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-center text-orange-800 mb-12">Exciting Giveaway Products!</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          {products.map((product, index) => (
+            <div key={index} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <img src={product.image} alt={product.name} className="w-full h-64 object-cover" />
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-2">{product.name}</h2>
+                <p className="text-gray-600 mb-4">{product.description}</p>
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-700"><span className="font-semibold">Release Year:</span> {product.details.releaseYear}</p>
+                  <p className="text-sm text-gray-700"><span className="font-semibold">Screen:</span> {product.details.screenSize}</p>
+                  <p className="text-sm text-gray-700"><span className="font-semibold">Chip:</span> {product.details.chip}</p>
+                  <p className="text-sm text-gray-700"><span className="font-semibold">Camera:</span> {product.details.camera}</p>
+                  <p className="text-sm text-gray-700"><span className="font-semibold">Battery Life:</span> {product.details.batteryLife}</p>
+                  <p className="text-sm text-gray-700"><span className="font-semibold">Colors:</span> {product.details.colors.join(', ')}</p>
+                </div>
+                <div className="mt-6 flex items-center justify-between">
+                  <span className="text-2xl font-bold text-orange-600">{product.details.price}</span>
+                  <button className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors duration-300">
+                    Enter to Win
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </section>
-  )
+    </div>
+  );
 }
 
 function CommentSection() {
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState([
+    {
+      id: 1,
+      name: 'Priya Sharma',
+      content: 'I won an iPhone 15 Pro! This Diwali giveaway is amazing. The spinning wheel was so exciting!',
+      rating: 5,
+      date: '2023-10-15'
+    },
+    {
+      id: 2,
+      name: 'Rahul Patel',
+      content: 'Great experience overall, but I wish there were more chances to win. The products are top-notch though!',
+      rating: 4,
+      date: '2023-10-14'
+    },
+    {
+      id: 3,
+      name: 'Anita Desai',
+      content: 'The countdown timer adds to the festive spirit. Im looking forward to more Diwali offers!',
+      rating: 5,
+      date: '2023-10-13'
+    },
+    {
+      id: 4,
+      name: 'Vikram Singh',
+      content: 'Didnt win this time, but the excitement was worth it. Will definitely try again!',
+      rating: 3,
+      date: '2023-10-12'
+    },
+    {
+      id: 5,
+      name: 'Meera Reddy',
+      content: 'The product range is impressive. Even though I didnt win, I ended up buying the new MacBook Pro. Great deals!',
+      rating: 4,
+      date: '2023-10-11'
+    }
+  ])
   const [newComment, setNewComment] = useState('')
   const [newRating, setNewRating] = useState(0)
-
-  useEffect(() => {
-    const storedComments = localStorage.getItem('comments')
-    if (storedComments) {
-      setComments(JSON.parse(storedComments))
-    }
-  }, [])
 
   const addComment = () => {
     if (newComment && newRating > 0) {
@@ -438,74 +491,61 @@ function CommentSection() {
         name: 'Anonymous',
         content: newComment,
         rating: newRating,
+        date: new Date().toISOString().split('T')[0]
       }
-      const updatedComments = [...comments, comment]
-      setComments(updatedComments)
-      localStorage.setItem('comments', JSON.stringify(updatedComments))
+      setComments([comment, ...comments])
       setNewComment('')
       setNewRating(0)
     }
   }
 
   return (
-    <section id="comments" className="my-12">
+    <section id="comments" className="my-12 max-w-4xl mx-auto px-4">
       <h2 className="text-4xl font-bold mb-8 text-center text-orange-800">Giveaway Feedback</h2>
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-6">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Share your Diwali giveaway experience..."
-            className="w-full px-4 py-3 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-orange-800"
-            rows={4}
-          ></textarea>
-          <div className="flex items-center mt-2">
-            <div className="flex">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <svg
-                  key={star}
-                  className={`h-8 w-8 cursor-pointer ${
-                    star <= newRating ? 'text-yellow-400' : 'text-gray-300'
-                  }`}
-                  onClick={() => setNewRating(star)}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <button
-              onClick={addComment}
-              className="ml-4 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-            >
-              Submit
-            </button>
+      <div className="mb-8">
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Share your Diwali giveaway experience..."
+          className="w-full px-4 py-3 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-orange-800"
+          rows={4}
+        ></textarea>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-8 w-8 cursor-pointer ${
+                  star <= newRating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                }`}
+                onClick={() => setNewRating(star)}
+              />
+            ))}
           </div>
+          <button onClick={addComment} className="bg-orange-600 hover:bg-orange-700">
+            Submit
+          </button>
         </div>
+      </div>
+      <div className="space-y-6">
         {comments.map((comment) => (
           <div
             key={comment.id}
-            className="bg-white p-6 rounded-lg shadow border border-orange-200 mb-4 animate-fadeIn"
+            className="bg-white p-6 rounded-lg shadow border border-orange-200 animate-fadeIn"
           >
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-semibold text-orange-700">{comment.name}</span>
+              <span className="text-sm text-gray-500">{comment.date}</span>
+            </div>
             <div className="flex items-center mb-2">
-              <span className="font-semibold mr-2 text-orange-700">{comment.name}</span>
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <svg
-                    key={star}
-                    className={`h-5 w-5 ${
-                      star <= comment.rating ? 'text-yellow-400' : 'text-gray-300'
-                    }`}
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className={`h-5 w-5 ${
+                    star <= comment.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                  }`}
+                />
+              ))}
             </div>
             <p className="text-orange-600">{comment.content}</p>
           </div>
@@ -514,6 +554,7 @@ function CommentSection() {
     </section>
   )
 }
+
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ weeks: 0, days: 0, hours: 0, minutes: 0 })
@@ -558,6 +599,7 @@ function CountdownTimer() {
 
 
 export default function GiveawayPage() {
+  console.log("sddaffsdfsdf")
   const [user, setUser] = useState(null)
   const [winner, setWinner] = useState(null)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -660,6 +702,10 @@ export default function GiveawayPage() {
                 <li>The festival typically lasts five days.</li>
                 <li>People clean and decorate their homes for Diwali.</li>
               </ul>
+            </div>
+
+            <div className='border'>
+            <GoogleAd/>
             </div>
           </div>
         </div>
